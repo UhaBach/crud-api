@@ -8,6 +8,7 @@ export function getAllUsers(req, res){
 }
 
 export function getUserById(userId, req, res){
+    
     let checkId = validate(userId);
     if (!checkId) {
         res.statusCode = 400;

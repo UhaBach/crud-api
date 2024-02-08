@@ -15,6 +15,12 @@ export function editUser(userId, req, res){
     });
     req.on("end", () => {
         body = parse(body);
+        body.age = Number(body.age);
+        if (!Number.isInteger(body.age)){
+            res.statusCode = 400;
+            res.end("The age property is not a number. Please check that the age property is correct and try again.");
+            return;
+        }
         let user = storage.editUser(userId, body.username, body.age, body.hobbies);
         if (!user) {
             res.statusCode = 404;

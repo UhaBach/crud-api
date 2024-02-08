@@ -1,7 +1,6 @@
 import { User } from "./user.js"
 
 class Storage {
-    count = 0;
     users = [];
     getUser = (userId) => {
         if(userId){
@@ -12,18 +11,9 @@ class Storage {
         }
     };
     createUser = (name, age, hobbies) => {
-        let user;
-        if (Array.isArray(hobbies)) {
-            user = new User(name, age, hobbies);
-            this.users.push(user);
-            return user;
-        }
-        else {
-            let hobbiesArr = [hobbies];
-            user = new User(name, age, hobbiesArr);
-            this.users.push(user);
-            return user;
-        }
+        let user = new User(name, age, this.checkHobbies(hobbies));
+        this.users.push(user);
+        return user;
     };
     editUser = (userId, name, age, hobbies) => {
         let index = this.users.findIndex(u => u.id === userId);
@@ -31,16 +21,20 @@ class Storage {
         if(name) this.users[index].username = name;
         if(age) this.users[index].age = age;
         if(hobbies) {
-            if (Array.isArray(hobbies)) {
-                this.users[index].hobbies = hobbies;
-            }
-            else {
-                let hobbiesArr = [hobbies];
-                this.users[index].hobbies = hobbiesArr;
-            }
+            this.users[index].hobbies = this.checkHobbies(hobbies);
         }
         return this.users[index];
-    }
+    };
+    deleteUser = () => {
+    };
+    checkHobbies = (hobbies) => {
+        if (Array.isArray(hobbies)) {
+            return hobbies;
+        }
+        else {
+            return [hobbies];
+        }
+    };
 }
 
 let storage = new Storage();

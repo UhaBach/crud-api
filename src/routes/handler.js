@@ -2,6 +2,7 @@ import config from "dotenv/config";
 import { getAllUsers, getUserById } from "./get.js";
 import { createUser } from "./post.js";
 import { editUser } from "./put.js";
+import { deleteUser } from "./delete.js";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -45,6 +46,13 @@ export function requestsHandler(req, res){
             }
             break;
         case "DELETE":
+            switch(req.url){
+                case `${routes[0]}/${userId}`:
+                    deleteUser(userId, req, res);
+                    break;
+                default:
+                    break;
+            }
             break;
         default:
             break;

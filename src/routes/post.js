@@ -14,9 +14,14 @@ export function createUser(req, res){
                 "\nCheck the spelling of the request body and try again.");
             return;
         }
+        body.age = Number(body.age);
+        if (!Number.isInteger(body.age)){
+            res.statusCode = 400;
+            res.end("The age property is not a number. Please check that the age property is correct and try again.");
+            return;
+        }
         let user = storage.createUser(body.username, body.age, body.hobbies);
         res.statusCode = 201;
         res.end(JSON.stringify(user));
     });
-    
 }
