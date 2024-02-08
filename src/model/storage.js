@@ -10,11 +10,36 @@ class Storage {
         else {
             return this.users;
         }
-    }
+    };
     createUser = (name, age, hobbies) => {
-        let user = new User(name, age, hobbies);
-        this.users.push(user);
-        return user;
+        let user;
+        if (Array.isArray(hobbies)) {
+            user = new User(name, age, hobbies);
+            this.users.push(user);
+            return user;
+        }
+        else {
+            let hobbiesArr = [hobbies];
+            user = new User(name, age, hobbiesArr);
+            this.users.push(user);
+            return user;
+        }
+    };
+    editUser = (userId, name, age, hobbies) => {
+        let index = this.users.findIndex(u => u.id === userId);
+        if (index === -1) return null;
+        if(name) this.users[index].username = name;
+        if(age) this.users[index].age = age;
+        if(hobbies) {
+            if (Array.isArray(hobbies)) {
+                this.users[index].hobbies = hobbies;
+            }
+            else {
+                let hobbiesArr = [hobbies];
+                this.users[index].hobbies = hobbiesArr;
+            }
+        }
+        return this.users[index];
     }
 }
 

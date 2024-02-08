@@ -8,7 +8,6 @@ export function createUser(req, res){
     });
     req.on("end", () => {
         body = parse(body);
-        console.log(body);
         if (!Object.hasOwn(body, "username") || !Object.hasOwn(body, "age") || !Object.hasOwn(body, "hobbies")) {
             res.statusCode = 400;
             res.end("The request body does not contain one or more required fields (username, age, hobbies)." + 

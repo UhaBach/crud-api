@@ -1,6 +1,7 @@
 import config from "dotenv/config";
 import { getAllUsers, getUserById } from "./get.js";
 import { createUser } from "./post.js";
+import { editUser } from "./put.js";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -35,6 +36,13 @@ export function requestsHandler(req, res){
             }
             break;
         case "PUT":
+            switch(req.url){
+                case `${routes[0]}/${userId}`:
+                    editUser(userId, req, res);
+                    break;
+                default:
+                    break;
+            }
             break;
         case "DELETE":
             break;
