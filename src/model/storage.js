@@ -11,21 +11,37 @@ class Storage {
         }
     };
     createUser = (name, age, hobbies) => {
-        let user = new User(name, age, this.checkHobbies(hobbies));
-        this.users.push(user);
-        return user;
+        try{
+            let user = new User(name, age, this.checkHobbies(hobbies));
+            this.users.push(user);
+            return user;
+        } catch(err) {
+            throw new Error("Error creating user. Please try again.");
+        }
+        
     };
     editUser = (userId, name, age, hobbies) => {
-        let index = this.users.findIndex(u => u.id === userId);
-        if (index === -1) return null;
-        if(name) this.users[index].username = name;
-        if(age) this.users[index].age = age;
-        if(hobbies) {
-            this.users[index].hobbies = this.checkHobbies(hobbies);
+        try{
+            let index = this.users.findIndex(u => u.id === userId);
+            if (index === -1) return null;
+            if(name) this.users[index].username = name;
+            if(age) this.users[index].age = age;
+            if(hobbies) {
+                this.users[index].hobbies = this.checkHobbies(hobbies);
+            }
+            return this.users[index];
+        } catch {
+            throw new Error("Error editing user. Please try again.");
         }
-        return this.users[index];
     };
-    deleteUser = () => {
+    deleteUser = (userId) => {
+        try{
+            let index = this.users.findIndex(u => u.id === userId);
+            if (index === -1) return null;
+            return this.users.splice(index, 1);
+        } catch {
+            throw new Error("Error deleting user. Please try again.");
+        }
     };
     checkHobbies = (hobbies) => {
         if (Array.isArray(hobbies)) {

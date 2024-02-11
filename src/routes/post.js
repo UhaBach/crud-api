@@ -1,27 +1,25 @@
 import storage from "../model/storage.js";
 import { parse } from "querystring";
+import { invalidAge, invalidId, noRequiredProperty, notFound, parseRequestBody } from "../utils/utils.js";
 
 export function createUser(req, res){
-    let body = "";
-    req.on("data", chunk => {
-        body = chunk.toString();
-    });
-    req.on("end", () => {
-        body = parse(body);
-        if (!Object.hasOwn(body, "username") || !Object.hasOwn(body, "age") || !Object.hasOwn(body, "hobbies")) {
-            res.statusCode = 400;
-            res.end("The request body does not contain one or more required fields (username, age, hobbies)." + 
-                "\nCheck the spelling of the request body and try again.");
-            return;
-        }
-        body.age = Number(body.age);
-        if (!Number.isInteger(body.age)){
-            res.statusCode = 400;
-            res.end("The age property is not a number. Please check that the age property is correct and try again.");
-            return;
-        }
-        let user = storage.createUser(body.username, body.age, body.hobbies);
-        res.statusCode = 201;
-        res.end(JSON.stringify(user));
-    });
+    try{
+        let body = "";
+        req.on("data", chunk => {
+            body = chunk.toString();
+        });
+        req.on("end", () => {
+            body = parseRequestBody(res, body);
+            if (body) {
+                body.age = Number(body.age);
+                let user = storage.createUser(body.username, body.age, body.hobbies);
+                res.statusCode = 201;
+                console.log(user);
+                res.end(JSON.stringify(user));
+            }
+        });
+    } catch(err){
+        res.statusCode = 500;
+        res.end(`Internal Server Error. ${err.message}`);
+    }
 }

@@ -1,26 +1,20 @@
 import storage from "../model/storage.js";
 import { validate } from "uuid";
+import { invalidAge, invalidId, noRequiredProperty, notFound } from "../utils/utils.js";
 
-export function getAllUsers(req, res){
+export function getAllUsers(res){
     let users = storage.getUser(null);
     res.statusCode = 200;
     res.end(JSON.stringify(users));
 }
 
-export function getUserById(userId, req, res){
-    
+export function getUserById(userId, res){
     let checkId = validate(userId);
-    if (!checkId) {
-        res.statusCode = 400;
-        res.end("Invalid ID. Please make sure the ID is in uuid format.");
-        return;
-    }
+    if (!checkId) return invalidId(res);
+
     let user = storage.getUser(userId);
-    if (!user){
-        res.statusCode = 404;
-        res.end("User not found.");
-        return;
-    }
+    if (!user) return notFound(res);
+    
     res.statusCode = 200;
     res.end(JSON.stringify(user));
 }

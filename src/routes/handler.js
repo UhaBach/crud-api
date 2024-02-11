@@ -3,6 +3,7 @@ import { getAllUsers, getUserById } from "./get.js";
 import { createUser } from "./post.js";
 import { editUser } from "./put.js";
 import { deleteUser } from "./delete.js";
+import { unhandledEndpoint, unhandledHttpMethod } from "./unhandled.js";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -12,18 +13,21 @@ const routes = [
 
 export function requestsHandler(req, res){
     const userId = req.url.split("/")[3];
+    // console.log(req.method);
+    // console.log(req.url);
     switch(req.method){
         case "GET":
             switch(req.url){
                 case "/":
                 case baseUrl:
                 case routes[0]:
-                    getAllUsers(req, res);
+                    getAllUsers(res);
                     break;
                 case `${routes[0]}/${userId}`:
-                    getUserById(userId, req, res);
+                    getUserById(userId, res);
                     break;
                 default:
+                    unhandledEndpoint(req, res);
                     break;
             }
             break;
@@ -33,6 +37,7 @@ export function requestsHandler(req, res){
                     createUser(req, res);
                     break;
                 default:
+                    unhandledEndpoint(req, res);
                     break;
             }
             break;
@@ -42,19 +47,22 @@ export function requestsHandler(req, res){
                     editUser(userId, req, res);
                     break;
                 default:
+                    unhandledEndpoint(req, res);
                     break;
             }
             break;
         case "DELETE":
             switch(req.url){
                 case `${routes[0]}/${userId}`:
-                    deleteUser(userId, req, res);
+                    deleteUser(userId, res);
                     break;
                 default:
+                    unhandledEndpoint(req, res);
                     break;
             }
             break;
         default:
+            unhandledHttpMethod(req, res);
             break;
     }
 }
