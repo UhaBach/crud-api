@@ -1,0 +1,21 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "exports": "./index.js",
+  "type": "module",
+  "scripts": {
+    "start:dev": "npx cross-env Node_ENV=development nodemon index.js",
+    "start:prod": "npx cross-env Node_ENV=production node index.js",
+    "test": "node src/test/test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.4.1"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
+}
